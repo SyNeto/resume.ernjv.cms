@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  sql:
+    image: mariadb:10.6
+    env_file:
+      - .env
+    volumes:
+      - cms_sql_volume:/var/lib/mysql
+    ports:
+      - 3306:3306
+  cms:
+    container_name: cms
+    image: wordpress:6
+    depends_on:
+      - sql
+    volumes:
+      - ./code:/var/www/html
+    env_file:
+      - .env
+    ports:
+      - 8080:80
+    
+volumes:
+  cms_sql_volume:
+
+networks:
+  default:
+    name: ernjv.me
